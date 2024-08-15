@@ -9,6 +9,8 @@
 		"clean": "farm clean"
 	},
 	"dependencies": {
+		"axios": "^1.7.4",
+		"pinia": "^2.2.1",
 		"vue": "^3.4.0"
 	},
 	"devDependencies": {
