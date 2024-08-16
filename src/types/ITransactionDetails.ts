@@ -11,4 +11,5 @@ export interface ITransactionDetails {
 	blockHash: string;
 	transactionHash: string;
 	blockTime: string;
+	tokenId?: string;
 }
