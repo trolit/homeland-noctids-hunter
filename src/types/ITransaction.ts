@@ -9,4 +9,6 @@ export interface ITransaction {
 	gas: number;
 	gasPrice: string;
 	gasUsed: number;
+	input: string;
+	blockTime: number;
 }
