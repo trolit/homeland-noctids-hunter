@@ -1,5 +1,11 @@
 <template>
-  <event-summary />
+	<div class="menu">
+		<input v-model="walletAddress" placeholder="your wallet address"/>
+
+		<button :disabled="isWalletAddressEmptyOrInvalid">Get summary</button>
+	</div>
+
+	<event-summary />
 </template>
 
 <script>
@@ -16,7 +22,14 @@ export default {
 
 		return {
 			httpService,
+			walletAddress: "",
 		};
+	},
+
+	computed: {
+		isWalletAddressEmptyOrInvalid() {
+			return this.walletAddress.trim().length !== 42;
+		},
 	},
 };
 </script>
