@@ -3,9 +3,15 @@
 </template>
 
 <script>
+import { useHttpServiceStore } from "@/store/useHttpServiceStore";
+
 export default {
 	data() {
-		return {};
+		const httpService = useHttpServiceStore();
+
+		return {
+			httpService,
+		};
 	},
 };
 </script>
