@@ -14,6 +14,8 @@
 
 <script>
 import EventSummary from "@/components/EventSummary.vue";
+
+import { sleep } from "@/helpers/sleep";
 import { useHttpServiceStore } from "@/store/useHttpServiceStore";
 
 export default {
@@ -87,6 +89,9 @@ export default {
 				} catch (error) {
 					this.error = error;
 				}
+
+				// sleep for 1 second between each requests to not overload API
+				await sleep(1);
 
 				page++;
 
