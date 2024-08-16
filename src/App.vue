@@ -9,14 +9,24 @@
 		</div>
 	</div>
 
-	<event-summary />
+	<event-summary :gifts="gifts" />
 </template>
 
 <script>
-import EventSummary from "@/components/EventSummary.vue";
-
 import { sleep } from "@/helpers/sleep";
+import { ITransaction } from "@/types/ITransaction";
+import EventSummary from "@/components/EventSummary.vue";
 import { useHttpServiceStore } from "@/store/useHttpServiceStore";
+import {
+	LOW_AXS_VALUE,
+	HIGH_AXS_VALUE,
+	SLP_TOKEN_SYMBOL,
+	AXS_TOKEN_SYMBOL,
+	ITEM_TOKEN_SYMBOL,
+	MAX_PAGES_TO_FETCH_LIMIT,
+	GIFT_TRANSACTION_INPUT_START,
+	EVENT_START_TIMESTAMP_IN_SECONDS,
+} from "@/assets/constants";
 
 export default {
 	components: {
@@ -26,6 +36,9 @@ export default {
 	data() {
 		const httpService = useHttpServiceStore();
 
+		const slpSrc = require("@/assets/images/slp.png").default;
+		const axsSrc = require("@/assets/images/axs.png").default;
+
 		return {
 			error: null,
 			httpService,
@@ -34,9 +47,44 @@ export default {
 			state: "",
 			claimGiftTransactions: [],
 
-			EVENT_START_TIMESTAMP_IN_SECONDS: 1722384000, // 31.07.24 00:00 GMT
-			MAX_PAGES_TO_FETCH_LIMIT: 10, // in case of some issue, prevent further fetch
-			GIFT_TRANSACTION_INPUT: "0x5ac66556", // when input starts with following data, it's claimGift
+			gifts: [
+				{
+					tokenSymbol: SLP_TOKEN_SYMBOL,
+					value: "20",
+					received: 0,
+					src: slpSrc,
+				},
+				{
+					tokenSymbol: AXS_TOKEN_SYMBOL,
+					value: LOW_AXS_VALUE,
+					received: 0,
+					src: axsSrc,
+				},
+				{
+					tokenSymbol: SLP_TOKEN_SYMBOL,
+					value: "100",
+					received: 0,
+					src: slpSrc,
+				},
+				{
+					tokenSymbol: AXS_TOKEN_SYMBOL,
+					value: HIGH_AXS_VALUE,
+					received: 0,
+					src: axsSrc,
+				},
+				{
+					tokenSymbol: ITEM_TOKEN_SYMBOL,
+					value: "Aave Phantom Altar",
+					received: 0,
+					src: require("@/assets/images/altar.png").default,
+				},
+				{
+					tokenSymbol: ITEM_TOKEN_SYMBOL,
+					value: "R0N1N-21",
+					received: 0,
+					src: require("@/assets/images/r0nin21.png").default,
+				},
+			],
 		};
 	},
 
@@ -76,13 +124,13 @@ export default {
 
 					for (const transaction of transactions) {
 						// if transaction is earlier than event start, end reached
-						if (transaction.blockTime < this.EVENT_START_TIMESTAMP_IN_SECONDS) {
+						if (transaction.blockTime < EVENT_START_TIMESTAMP_IN_SECONDS) {
 							isTransactionBeforeEventStartDate = true;
 
 							break;
 						}
 
-						if (transaction.input.startsWith(this.GIFT_TRANSACTION_INPUT)) {
+						if (transaction.input.startsWith(GIFT_TRANSACTION_INPUT_START)) {
 							this.claimGiftTransactions.push(transaction);
 						}
 					}
@@ -98,7 +146,7 @@ export default {
 				if (
 					this.error ||
 					isTransactionBeforeEventStartDate ||
-					page > this.MAX_PAGES_TO_FETCH_LIMIT
+					page > MAX_PAGES_TO_FETCH_LIMIT
 				) {
 					break;
 				}

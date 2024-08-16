@@ -22,44 +22,19 @@ export default {
 		GiftBar,
 	},
 
+	props: {
+		gifts: {
+			type: Array,
+			required: true,
+		},
+	},
+
 	data() {
 		const slpSrc = require("@/assets/images/slp.png").default;
 		const axsSrc = require("@/assets/images/axs.png").default;
 
 		return {
 			eventTitleSrc: require("@/assets/images/title.png").default,
-			gifts: [
-				{
-					name: "20 SLP",
-					received: 0,
-					src: slpSrc,
-				},
-				{
-					name: "0.01 AXS",
-					received: 0,
-					src: axsSrc,
-				},
-				{
-					name: "100 SLP",
-					received: 0,
-					src: slpSrc,
-				},
-				{
-					name: "0.1 AXS",
-					received: 0,
-					src: axsSrc,
-				},
-				{
-					name: "Aave Phantom Altar",
-					received: 0,
-					src: require("@/assets/images/altar.png").default,
-				},
-				{
-					name: "R0N1N-21",
-					received: 0,
-					src: require("@/assets/images/r0nin21.png").default,
-				},
-			],
 		};
 	},
 };

@@ -17,6 +17,13 @@
 </template>
 
 <script>
+import {
+	ITEM_TOKEN_SYMBOL,
+	AXS_TOKEN_SYMBOL,
+	LOW_AXS_VALUE,
+	HIGH_AXS_VALUE,
+} from "@/assets/constants";
+
 export default {
 	props: {
 		item: {
@@ -31,7 +38,15 @@ export default {
 		},
 
 		name() {
-			return this.item.name;
+			const { tokenSymbol, value } = this.item;
+
+			if (tokenSymbol === AXS_TOKEN_SYMBOL) {
+				return `${value === LOW_AXS_VALUE ? "0.01" : "0.1"} ${AXS_TOKEN_SYMBOL}`;
+			}
+
+			return tokenSymbol === ITEM_TOKEN_SYMBOL
+				? value
+				: `${value} ${tokenSymbol}`;
 		},
 
 		received() {
