@@ -92,3 +92,14 @@
     justify-content: center;
   }
 }
+
+.menu {
+  gap: 10px;
+  display: flex;
+  margin-bottom: 50px;
+
+  input {
+    width: 250px;
+    padding: 5px;
+  }
+}
