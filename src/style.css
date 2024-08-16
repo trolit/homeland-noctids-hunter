@@ -13,3 +13,82 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.logo {
+  position: absolute;
+  right: 0px;
+  bottom: -25px;
+
+  img {
+    height: 150px;
+  }
+}
+
+.gift-bar {
+  width: 60%;
+  height: 55px;
+  display: flex;
+  border-radius: 5px;
+  align-items: center;
+  background-color: rgba(203, 197, 90, 0.8);
+
+  .image-wrapper {
+    width: 50px;
+    display: flex;
+    margin-left: 15px;
+    justify-content: center;
+
+    img {
+      height: 40px;
+    }
+  }
+
+  .text-wrapper {
+    width: 100%;
+    display: flex;
+    font-size: 30px;
+    color: #575542;
+    align-items: center;
+    justify-content: space-between;
+
+    .name {
+      margin-left: 20px;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .counter {
+      padding: 5px 13px;
+      border-radius: 5px;
+      background-color: #A9A560;
+    }
+  }
+}
+
+.event-summary {
+  width: 950px;
+  height: 410px;
+  position: relative;
+  background-position: 35% 75%;
+  background-repeat: no-repeat;
+  background-image: url('@/assets/images/bg.jpg');
+
+  .title {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    border-radius: 60px;
+
+    img {
+      height: 150px;
+    }
+  }
+
+  .gift-bars {
+    display: flex;
+    row-gap: 10px;
+    height: 100%;
+    padding-left: 45px;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
