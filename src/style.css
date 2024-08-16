@@ -13,3 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.logo {
+  position: absolute;
+  right: 0px;
+  bottom: -25px;
+
+  img {
+    height: 150px;
+  }
+}
