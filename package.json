@@ -9,7 +9,7 @@
     "build": "farm build",
     "preview": "farm preview",
     "clean": "farm clean",
-    "format-all": "npx prettier src/**/*.ts --write"
+    "format-all": "npx prettier src/**/*.{ts,vue} --write"
   },
   "dependencies": {
     "axios": "^1.7.4",

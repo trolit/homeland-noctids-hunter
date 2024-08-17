@@ -109,7 +109,7 @@ export default {
         await this.fetchTransactions();
 
         debug(
-          `Collecting transactions done! (${this.claimGiftTransactions.length})`
+          `Collecting transactions done! (${this.claimGiftTransactions.length})`,
         );
 
         debug("Collecting transactions details...");
@@ -138,7 +138,7 @@ export default {
       do {
         const transactions = await this.httpService.getTransactions(
           this.walletAddress,
-          page
+          page,
         );
 
         for (const transaction of transactions) {
@@ -175,7 +175,7 @@ export default {
 
       for (let index = 0; index < claimGiftTransactionsLength; index++) {
         const transactionDetails = await this.httpService.getTransactionDetails(
-          transaction.transactionHash
+          transaction.transactionHash,
         );
 
         const leftTransactions = claimGiftTransactionsLength - index - 1;
@@ -194,8 +194,8 @@ export default {
 
           debug(
             `Collecting transaction details... Estimated time: ${secondsToCountdown(
-              delayInSeconds
-            )}`
+              delayInSeconds,
+            )}`,
           );
         }
       }
