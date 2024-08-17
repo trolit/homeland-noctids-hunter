@@ -136,10 +136,14 @@ export default {
       let isTransactionBeforeEventStartDate = false;
 
       do {
-        const transactions = await this.httpService.getTransactions(
+        const { items: transactions } = await this.httpService.getTransactions(
           this.walletAddress,
           page,
         );
+
+        if (!transactions.length) {
+          break;
+        }
 
         for (const transaction of transactions) {
           // if transaction is earlier than event start, end reached
