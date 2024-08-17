@@ -11,5 +11,5 @@ export interface ITransactionDetails {
 	blockHash: string;
 	transactionHash: string;
 	blockTime: string;
-	tokenId?: string;
+	tokenId?: string; // that field is available when transaction detail refer to NFT item
 }
