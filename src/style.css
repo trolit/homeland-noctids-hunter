@@ -59,7 +59,7 @@
     .counter {
       padding: 5px 13px;
       border-radius: 5px;
-      background-color: #A9A560;
+      background-color: #a9a560;
     }
   }
 }
@@ -70,7 +70,7 @@
   position: relative;
   background-position: 35% 75%;
   background-repeat: no-repeat;
-  background-image: url('@/assets/images/bg.jpg');
+  background-image: url("@/assets/images/bg.jpg");
 
   .title {
     position: absolute;
