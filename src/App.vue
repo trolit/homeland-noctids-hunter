@@ -102,10 +102,6 @@ export default {
   },
 
   computed: {
-    isWalletAddressEmptyOrInvalid() {
-      return this.walletAddress.trim().length !== 42;
-    },
-
     totalClaimGiftTransactionsLength() {
       return this.claimGiftTransactions.length;
     },
