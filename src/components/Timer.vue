@@ -44,6 +44,10 @@ export default {
 
   methods: {
     timerStart() {
+      if (!this.timer) {
+        this.elapsedTimeInSeconds = 0;
+      }
+
       this.timer = setTimeout(() => {
         this.elapsedTimeInSeconds++;
         this.timerStart();
@@ -53,7 +57,6 @@ export default {
     timerReset() {
       clearInterval(this.timer);
       this.timer = null;
-      this.elapsedTimeInSeconds = 0;
     },
   },
 };
