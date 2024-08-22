@@ -198,7 +198,7 @@ export default {
             (leftTransactions - 1) * DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS;
 
           debug(
-            `Collecting transaction details... Estimated time: ${secondsToCountdown(
+            `Collecting transactions details... Estimated time: ${secondsToCountdown(
               delayInSeconds,
             )}`,
           );
