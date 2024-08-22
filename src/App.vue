@@ -176,7 +176,7 @@ export default {
     async fetchTransactionsDetails() {
       const DEBUG_STEP = 4;
       const DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS = 5;
-      const claimGiftTransactionsLength = 15;
+      const claimGiftTransactionsLength = this.claimGiftTransactions.length;
 
       for (let index = 0; index < claimGiftTransactionsLength; index++) {
         const transactionDetails = await this.httpService.getTransactionDetails(
