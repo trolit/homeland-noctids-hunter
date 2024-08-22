@@ -177,7 +177,7 @@ export default {
     },
 
     async fetchTransactionsDetails() {
-      const DEBUG_STEP = 4;
+      const PRINT_MESSAGE_STEP = 4;
 
       for (
         let index = 0;
@@ -201,7 +201,7 @@ export default {
 
         await sleep(DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS);
 
-        if (index >= DEBUG_STEP && index % DEBUG_STEP === 0) {
+        if (index >= PRINT_MESSAGE_STEP && index % PRINT_MESSAGE_STEP === 0) {
           const delayInSeconds =
             (leftTransactions - 1) * DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS;
 
