@@ -109,7 +109,7 @@ export default {
         await this.fetchTransactions();
 
         debug(
-          `Collecting transactions done! (${this.claimGiftTransactions.length})`,
+          `Total fetched transactions: (${this.claimGiftTransactions.length})`,
         );
 
         debug("Collecting transactions details...");
@@ -124,8 +124,9 @@ export default {
 
         this.updateGifts();
 
-        debug("Total fetched transactions details ->");
-        debug(this.claimGiftTransactionsDetails);
+        debug(
+          `Total fetched transactions details: ${this.claimGiftTransactionsDetails.length}`,
+        );
       }
 
       debug("Everything completed!");
