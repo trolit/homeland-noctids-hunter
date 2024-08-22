@@ -123,9 +123,7 @@ export default {
 
         await this.fetchTransactions();
 
-        this.logStatus(
-          `Total fetched transactions: (${this.claimGiftTransactions.length}). Collecting transactions details...`,
-        );
+        this.logStatus("Collecting transactions details...");
 
         await this.fetchTransactionsDetails();
       } catch (error) {
@@ -137,10 +135,6 @@ export default {
         this.timerTrigger = false;
 
         this.updateGifts();
-
-        this.logStatus(
-          `Total fetched transactions details: ${this.claimGiftTransactionsDetails.length}`,
-        );
       }
 
       this.logStatus("Everything done, returned to idle state...");
@@ -218,7 +212,7 @@ export default {
             (leftTransactions - 1) * DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS;
 
           this.logStatus(
-            `Collecting transactions details... ETA: ${secondsToCountdown(
+            `Collecting transactions details (${index + 1}/${this.totalClaimGiftTransactionsLength})... ETA: +${secondsToCountdown(
               delayInSeconds,
             )}`,
           );
