@@ -130,8 +130,7 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
-
-      this.currentStatus = "";
+      this.timerTrigger = true;
 
       try {
         this.logStatus("Collecting transactions...");
@@ -149,6 +148,7 @@ export default {
         console.log(error);
       } finally {
         this.isLoading = false;
+        this.timerTrigger = false;
 
         this.updateGifts();
 
