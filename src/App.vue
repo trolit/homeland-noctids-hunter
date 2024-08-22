@@ -109,10 +109,8 @@ export default {
         await this.fetchTransactions();
 
         debug(
-          `Total fetched transactions: (${this.claimGiftTransactions.length})`,
+          `Total fetched transactions: (${this.claimGiftTransactions.length}). Collecting transactions details...`,
         );
-
-        debug("Collecting transactions details...");
 
         await this.fetchTransactionsDetails();
       } catch (error) {
