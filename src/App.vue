@@ -137,7 +137,7 @@ export default {
       let isTransactionBeforeEventStartDate = false;
 
       do {
-        const { items: transactions } = await this.httpService.getTransactions(
+        const transactions = await this.httpService.getTransactions(
           this.walletAddress,
           page,
         );
@@ -179,6 +179,8 @@ export default {
       const claimGiftTransactionsLength = this.claimGiftTransactions.length;
 
       for (let index = 0; index < claimGiftTransactionsLength; index++) {
+        const transaction = this.claimGiftTransactions[index];
+
         const transactionDetails = await this.httpService.getTransactionDetails(
           transaction.transactionHash,
         );
