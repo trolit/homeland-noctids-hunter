@@ -10,25 +10,11 @@
     </button>
   </div>
 
-  <div class="status">
-    <ul>
-      <li>
-        Status: <span> {{ status }} </span>
-      </li>
-
-      <li>
-        Elapsed time:
-        <span>
-          <timer :trigger="timerTrigger" />
-        </span>
-      </li>
-
-      <li>
-        Total gift transactions:
-        <span> {{ totalClaimGiftTransactionsLength }}</span>
-      </li>
-    </ul>
-  </div>
+  <status
+    :message="status"
+    :timer-trigger="timerTrigger"
+    :transactions-count="totalClaimGiftTransactionsLength"
+  />
 
   <event-summary :gifts="Object.values(gifts)" />
 </template>
@@ -36,7 +22,7 @@
 <script>
 import { debug } from "@/helpers/debug";
 import { sleep } from "@/helpers/sleep";
-import Timer from "@/components/Timer.vue";
+import Status from "@/components/Status.vue";
 import { ITransaction } from "@/types/ITransaction";
 import EventSummary from "@/components/EventSummary.vue";
 import { ITransactionDetails } from "./types/ITransactionDetails";
@@ -56,7 +42,7 @@ import {
 
 export default {
   components: {
-    Timer,
+    Status,
     EventSummary,
   },
 
