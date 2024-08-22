@@ -37,7 +37,7 @@ export default {
           return;
         }
 
-        this.timerReset();
+        this.timerStop();
       },
     },
   },
@@ -54,7 +54,7 @@ export default {
       }, 1000);
     },
 
-    timerReset() {
+    timerStop() {
       clearInterval(this.timer);
       this.timer = null;
     },
