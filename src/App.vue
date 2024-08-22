@@ -1,14 +1,16 @@
 <template>
-  <div class="menu">
-    <input v-model="walletAddress" placeholder="your wallet address" />
+  <data-form
+    :is-loading="isLoading"
+    :wallet-address="walletAddress"
+    @on-submit="onSubmit"
+    @update:wallet-address="walletAddress = $event"
+  />
 
-    <button
-      :disabled="isWalletAddressEmptyOrInvalid || isLoading"
-      @click="onSubmit"
-    >
-      Get summary
-    </button>
-  </div>
+  <status
+    :message="status"
+    :timer-trigger="timerTrigger"
+    :transactions-count="totalClaimGiftTransactionsLength"
+  />
 
   <event-summary :gifts="Object.values(gifts)" />
 </template>
@@ -16,6 +18,8 @@
 <script>
 import { debug } from "@/helpers/debug";
 import { sleep } from "@/helpers/sleep";
+import Status from "@/components/Status.vue";
+import DataForm from "@/components/DataForm.vue";
 import { ITransaction } from "@/types/ITransaction";
 import EventSummary from "@/components/EventSummary.vue";
 import { ITransactionDetails } from "./types/ITransactionDetails";
@@ -31,10 +35,13 @@ import {
   GIFT_TRANSACTION_INPUT_START,
   EVENT_START_TIMESTAMP_IN_SECONDS,
   AAVE_PHANTOM_ALTAR_TOKEN_ID_START,
+  DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS,
 } from "@/assets/constants";
 
 export default {
   components: {
+    Status,
+    DataForm,
     EventSummary,
   },
 
@@ -47,8 +54,10 @@ export default {
     return {
       error: null,
       httpService,
-      walletAddress: "",
+      status: "idle",
       isLoading: false,
+      walletAddress: "",
+      timerTrigger: false,
       claimGiftTransactions: [],
       claimGiftTransactionsDetails: [],
 
@@ -94,25 +103,22 @@ export default {
   },
 
   computed: {
-    isWalletAddressEmptyOrInvalid() {
-      return this.walletAddress.trim().length !== 42;
+    totalClaimGiftTransactionsLength() {
+      return this.claimGiftTransactions.length;
     },
   },
 
   methods: {
     async onSubmit() {
       this.isLoading = true;
+      this.timerTrigger = true;
 
       try {
-        debug("Collecting transactions...");
+        this.logStatus("Collecting transactions...");
 
         await this.fetchTransactions();
 
-        debug(
-          `Collecting transactions done! (${this.claimGiftTransactions.length})`,
-        );
-
-        debug("Collecting transactions details...");
+        this.logStatus("Collecting transactions details...");
 
         await this.fetchTransactionsDetails();
       } catch (error) {
@@ -121,14 +127,12 @@ export default {
         console.log(error);
       } finally {
         this.isLoading = false;
+        this.timerTrigger = false;
 
         this.updateGifts();
-
-        debug("Total fetched transactions details ->");
-        debug(this.claimGiftTransactionsDetails);
       }
 
-      debug("Everything completed!");
+      this.logStatus("Everything done, returned to idle state...");
     },
 
     async fetchTransactions() {
@@ -136,7 +140,7 @@ export default {
       let isTransactionBeforeEventStartDate = false;
 
       do {
-        const { items: transactions } = await this.httpService.getTransactions(
+        const transactions = await this.httpService.getTransactions(
           this.walletAddress,
           page,
         );
@@ -159,7 +163,7 @@ export default {
         }
 
         // sleep between each requests to not overload network
-        await sleep(4);
+        await sleep(DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS);
 
         page++;
 
@@ -173,16 +177,21 @@ export default {
     },
 
     async fetchTransactionsDetails() {
-      const DEBUG_STEP = 4;
-      const DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS = 5;
-      const claimGiftTransactionsLength = 15;
+      const PRINT_MESSAGE_STEP = 4;
 
-      for (let index = 0; index < claimGiftTransactionsLength; index++) {
+      for (
+        let index = 0;
+        index < this.totalClaimGiftTransactionsLength;
+        index++
+      ) {
+        const transaction = this.claimGiftTransactions[index];
+
         const transactionDetails = await this.httpService.getTransactionDetails(
           transaction.transactionHash,
         );
 
-        const leftTransactions = claimGiftTransactionsLength - index - 1;
+        const leftTransactions =
+          this.totalClaimGiftTransactionsLength - index - 1;
 
         this.claimGiftTransactionsDetails.push(transactionDetails);
 
@@ -192,12 +201,12 @@ export default {
 
         await sleep(DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS);
 
-        if (index >= DEBUG_STEP && index % DEBUG_STEP === 0) {
+        if (index >= PRINT_MESSAGE_STEP && index % PRINT_MESSAGE_STEP === 0) {
           const delayInSeconds =
             (leftTransactions - 1) * DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS;
 
-          debug(
-            `Collecting transaction details... Estimated time: ${secondsToCountdown(
+          this.logStatus(
+            `Collecting transactions details (${index + 1}/${this.totalClaimGiftTransactionsLength})... ETA: +${secondsToCountdown(
               delayInSeconds,
             )}`,
           );
@@ -206,7 +215,7 @@ export default {
     },
 
     updateGifts() {
-      debug("Updating summary UI...");
+      this.logStatus("Updating summary UI...");
 
       for (const { tokenSymbol, tokenId, value } of this
         .claimGiftTransactionsDetails) {
@@ -228,6 +237,12 @@ export default {
           this.gifts[value === "20" ? "lowSlp" : "highSlp"].received++;
         }
       }
+    },
+
+    logStatus(message) {
+      this.status = message;
+
+      debug(message);
     },
   },
 };
