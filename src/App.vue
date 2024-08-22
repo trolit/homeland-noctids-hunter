@@ -35,6 +35,7 @@ import {
   GIFT_TRANSACTION_INPUT_START,
   EVENT_START_TIMESTAMP_IN_SECONDS,
   AAVE_PHANTOM_ALTAR_TOKEN_ID_START,
+  DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS,
 } from "@/assets/constants";
 
 export default {
@@ -162,7 +163,7 @@ export default {
         }
 
         // sleep between each requests to not overload network
-        await sleep(4);
+        await sleep(DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS);
 
         page++;
 
@@ -177,7 +178,6 @@ export default {
 
     async fetchTransactionsDetails() {
       const DEBUG_STEP = 4;
-      const DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS = 5;
 
       for (
         let index = 0;
