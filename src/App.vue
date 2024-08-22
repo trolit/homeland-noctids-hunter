@@ -6,8 +6,28 @@
       :disabled="isWalletAddressEmptyOrInvalid || isLoading"
       @click="onSubmit"
     >
-      Get summary
+      Get my summary
     </button>
+  </div>
+
+  <div class="status">
+    <ul>
+      <li>
+        Status: <span> {{ status }} </span>
+      </li>
+
+      <li>
+        Elapsed time:
+        <span>
+          <timer :trigger="timerTrigger" />
+        </span>
+      </li>
+
+      <li>
+        Total gift transactions:
+        <span> {{ totalClaimGiftTransactionsLength }}</span>
+      </li>
+    </ul>
   </div>
 
   <event-summary :gifts="Object.values(gifts)" />
@@ -16,6 +36,7 @@
 <script>
 import { debug } from "@/helpers/debug";
 import { sleep } from "@/helpers/sleep";
+import Timer from "@/components/Timer.vue";
 import { ITransaction } from "@/types/ITransaction";
 import EventSummary from "@/components/EventSummary.vue";
 import { ITransactionDetails } from "./types/ITransactionDetails";
@@ -35,6 +56,7 @@ import {
 
 export default {
   components: {
+    Timer,
     EventSummary,
   },
 
@@ -48,6 +70,8 @@ export default {
       error: null,
       httpService,
       walletAddress: "",
+      status: "idle",
+      timerTrigger: false,
       isLoading: false,
       claimGiftTransactions: [],
       claimGiftTransactionsDetails: [],
@@ -97,18 +121,24 @@ export default {
     isWalletAddressEmptyOrInvalid() {
       return this.walletAddress.trim().length !== 42;
     },
+
+    totalClaimGiftTransactionsLength() {
+      return this.claimGiftTransactions.length;
+    },
   },
 
   methods: {
     async onSubmit() {
       this.isLoading = true;
 
+      this.currentStatus = "";
+
       try {
-        debug("Collecting transactions...");
+        this.logStatus("Collecting transactions...");
 
         await this.fetchTransactions();
 
-        debug(
+        this.logStatus(
           `Total fetched transactions: (${this.claimGiftTransactions.length}). Collecting transactions details...`,
         );
 
@@ -122,12 +152,12 @@ export default {
 
         this.updateGifts();
 
-        debug(
+        this.logStatus(
           `Total fetched transactions details: ${this.claimGiftTransactionsDetails.length}`,
         );
       }
 
-      debug("Everything completed!");
+      this.logStatus("Everything done, returned to idle state...");
     },
 
     async fetchTransactions() {
@@ -174,16 +204,20 @@ export default {
     async fetchTransactionsDetails() {
       const DEBUG_STEP = 4;
       const DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS = 5;
-      const claimGiftTransactionsLength = this.claimGiftTransactions.length;
 
-      for (let index = 0; index < claimGiftTransactionsLength; index++) {
+      for (
+        let index = 0;
+        index < this.totalClaimGiftTransactionsLength;
+        index++
+      ) {
         const transaction = this.claimGiftTransactions[index];
 
         const transactionDetails = await this.httpService.getTransactionDetails(
           transaction.transactionHash,
         );
 
-        const leftTransactions = claimGiftTransactionsLength - index - 1;
+        const leftTransactions =
+          this.totalClaimGiftTransactionsLength - index - 1;
 
         this.claimGiftTransactionsDetails.push(transactionDetails);
 
@@ -197,8 +231,8 @@ export default {
           const delayInSeconds =
             (leftTransactions - 1) * DELAY_BETWEEN_EACH_REQUEST_IN_SECONDS;
 
-          debug(
-            `Collecting transactions details... Estimated time: ${secondsToCountdown(
+          this.logStatus(
+            `Collecting transactions details... ETA: ${secondsToCountdown(
               delayInSeconds,
             )}`,
           );
@@ -207,7 +241,7 @@ export default {
     },
 
     updateGifts() {
-      debug("Updating summary UI...");
+      this.logStatus("Updating summary UI...");
 
       for (const { tokenSymbol, tokenId, value } of this
         .claimGiftTransactionsDetails) {
@@ -229,6 +263,12 @@ export default {
           this.gifts[value === "20" ? "lowSlp" : "highSlp"].received++;
         }
       }
+    },
+
+    logStatus(message) {
+      this.status = message;
+
+      debug(message);
     },
   },
 };
