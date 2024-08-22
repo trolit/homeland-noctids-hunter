@@ -1,14 +1,10 @@
 <template>
-  <div class="menu">
-    <input v-model="walletAddress" placeholder="your wallet address" />
-
-    <button
-      :disabled="isWalletAddressEmptyOrInvalid || isLoading"
-      @click="onSubmit"
-    >
-      Get my summary
-    </button>
-  </div>
+  <data-form
+    :is-loading="isLoading"
+    :wallet-address="walletAddress"
+    @on-submit="onSubmit"
+    @update:wallet-address="walletAddress = $event"
+  />
 
   <status
     :message="status"
@@ -23,6 +19,7 @@
 import { debug } from "@/helpers/debug";
 import { sleep } from "@/helpers/sleep";
 import Status from "@/components/Status.vue";
+import DataForm from "@/components/DataForm.vue";
 import { ITransaction } from "@/types/ITransaction";
 import EventSummary from "@/components/EventSummary.vue";
 import { ITransactionDetails } from "./types/ITransactionDetails";
@@ -43,6 +40,7 @@ import {
 export default {
   components: {
     Status,
+    DataForm,
     EventSummary,
   },
 
@@ -55,10 +53,10 @@ export default {
     return {
       error: null,
       httpService,
-      walletAddress: "",
       status: "idle",
-      timerTrigger: false,
       isLoading: false,
+      walletAddress: "",
+      timerTrigger: false,
       claimGiftTransactions: [],
       claimGiftTransactionsDetails: [],
 
