@@ -96,10 +96,17 @@
 .menu {
   gap: 10px;
   display: flex;
-  margin-bottom: 50px;
 
   input {
     width: 250px;
     padding: 5px;
+  }
+}
+
+.status {
+  margin-bottom: 15px;
+
+  span {
+    color: #ffb169;
   }
 }
