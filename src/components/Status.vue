@@ -13,7 +13,7 @@
       </li>
 
       <li>
-        Total gift transactions:
+        Found gift transactions:
         <span> {{ transactionsCount }}</span>
       </li>
     </ul>
